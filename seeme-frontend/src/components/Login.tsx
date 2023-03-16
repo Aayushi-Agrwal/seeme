@@ -1,24 +1,37 @@
 import logo from "../assets/logowhite.png";
 import { GoogleLogin } from "@react-oauth/google";
+import { gapi } from "gapi-script";
+import { useEffect } from "react";
+import { client } from "../client";
 
 const Login = () => {
   const responseMessage = (response: any) => {
-    console.log(response);
+    console.log("LOGIN SUCCESS! Current user: ", response.profileObj);
+    localStorage.setItem("user", JSON.stringify(response.profileObj));
+
+    const { name, googleId, imageUrl } = response.profileObj;
+
+    const doc = {
+      _id: googleId,
+      _type: "user",
+      userName: name,
+      image: imageUrl,
+    };
   };
   const errorMessage = (error: Error) => {
-    console.log(error);
+    console.log("LOGIN FAILED! res: ", error);
   };
-  //     return (
-  //         <div>
-  //             <h2>React Google Login</h2>
-  //             <br />
-  //             <br />
-  //
-  //         </div>
-  //     )
-  // }
-  // export default App;
 
+  useEffect(() => {
+    function start() {
+      gapi.client.init({
+        clientId: process.env.REACT_APP_GOOGLE_CLIENT_ID,
+        scope: "",
+      });
+    }
+
+    gapi.load("client: auth2", start);
+  });
   return (
     <div className="flex h-screen">
       <div className="relative w-full h-full">
