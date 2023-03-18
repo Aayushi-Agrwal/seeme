@@ -3,23 +3,35 @@ import { GoogleLogin } from "@react-oauth/google";
 import { gapi } from "gapi-script";
 import { useEffect } from "react";
 import { client } from "../client";
+import { useNavigate } from "react-router-dom";
+import jwt_decode from "jwt-decode";
 
 const Login = () => {
-  const responseMessage = (response: any) => {
-    console.log("LOGIN SUCCESS! Current user: ", response.profileObj);
-    localStorage.setItem("user", JSON.stringify(response.profileObj));
+  const navigate = useNavigate();
 
-    const { name, googleId, imageUrl } = response.profileObj;
+  const responseMessage = (response: any) => {
+    console.log("LOGIN SUCCESS! Current user: ", response);
+    var decode: any = jwt_decode(response.credential);
+    console.log(decode);
+
+    localStorage.setItem("user", JSON.stringify(decode));
+
+    const { sub, name, picture } = decode;
 
     const doc = {
-      _id: googleId,
+      _id: sub,
       _type: "user",
       userName: name,
-      image: imageUrl,
+      image: picture,
     };
+
+    client.createIfNotExists(doc).then(() => {
+      navigate("/", { replace: true });
+    });
   };
-  const errorMessage = (error: Error) => {
-    console.log("LOGIN FAILED! res: ", error);
+
+  const errorMessage = () => {
+    console.log("LOGIN FAILED!");
   };
 
   useEffect(() => {
@@ -32,6 +44,7 @@ const Login = () => {
 
     gapi.load("client: auth2", start);
   });
+
   return (
     <div className="flex h-screen">
       <div className="relative w-full h-full">
@@ -49,7 +62,7 @@ const Login = () => {
           </div>
 
           <div className="shadow-2xl">
-            <GoogleLogin onSuccess={responseMessage} />
+            <GoogleLogin onSuccess={responseMessage} onError={errorMessage} />
           </div>
         </div>
       </div>
