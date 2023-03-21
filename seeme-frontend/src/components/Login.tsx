@@ -1,7 +1,7 @@
 import logo from "../assets/logowhite.png";
 import { GoogleLogin } from "@react-oauth/google";
-import { gapi } from "gapi-script";
-import { useEffect } from "react";
+// import { gapi } from "gapi-script";
+// import { useEffect } from "react";
 import { client } from "../client";
 import { useNavigate } from "react-router-dom";
 import jwt_decode from "jwt-decode";
@@ -12,7 +12,6 @@ const Login = () => {
   const responseMessage = (response: any) => {
     console.log("LOGIN SUCCESS! Current user: ", response);
     var decode: any = jwt_decode(response.credential);
-    console.log(decode);
 
     localStorage.setItem("user", JSON.stringify(decode));
 
@@ -34,16 +33,16 @@ const Login = () => {
     console.log("LOGIN FAILED!");
   };
 
-  useEffect(() => {
-    function start() {
-      gapi.client.init({
-        clientId: process.env.REACT_APP_GOOGLE_CLIENT_ID,
-        scope: "",
-      });
-    }
+  // useEffect(() => {
+  //   function start() {
+  //     gapi.client.init({
+  //       clientId: process.env.REACT_APP_GOOGLE_CLIENT_ID,
+  //       scope: "",
+  //     });
+  //   }
 
-    gapi.load("client: auth2", start);
-  });
+  //   gapi.load("client: auth2", start);
+  // });
 
   return (
     <div className="flex h-screen">
