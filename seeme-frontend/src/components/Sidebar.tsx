@@ -11,7 +11,7 @@ const Sidebar = ({
   user,
 }: {
   closeToggle?: React.Dispatch<React.SetStateAction<boolean>>;
-  user?: user;
+  user: user;
 }) => {
   const handleCloseSidebar = () => {
     if (closeToggle) closeToggle(false);
@@ -35,7 +35,7 @@ const Sidebar = ({
         <img
           src={category.image}
           alt=""
-          className="w-8 h-8 rounded-fill shadow-sm"
+          className="w-8 h-8 rounded-full shadow-sm"
         />
         {category.name}
       </NavLink>
@@ -52,7 +52,7 @@ const Sidebar = ({
         >
           <img src={logo} alt="logo" className="w-full" />
         </Link>
-        <div className="flex flex-col gap-5">
+        <div className="flex flex-col gap-3">
           <NavLink
             to="/"
             className={({ isActive }) =>

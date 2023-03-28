@@ -9,8 +9,6 @@ const App = () => {
     <Routes>
       <Route path="/login" element={<Login />} />
       <Route path="/" element={<Home />} />
-      <Route path="/user-profile/:userId" element={<UserProfile />} />
-      <Route path="/*" element={<Pins />} />
     </Routes>
   );
 };
